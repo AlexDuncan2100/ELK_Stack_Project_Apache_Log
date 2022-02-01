@@ -5,6 +5,7 @@
 * Create an EC2 instance.
 * Install Java.
 * Install Elasticseach.
+* Install Metricbeat
 * Install Logstash.
 * Install Kibana.
 
