@@ -143,7 +143,7 @@ cluster.initial_master_nodes: ["node-1"]
 # action.destructive_requires_name: true
 
 
-# You need to configure JVM heap size to be in the safe side when running the ElasticSearch. Since we are running an m4.large instance, we will allocate 4GB as the heap size. Edit the file “/etc/elasticsearch/jvm.options” and enable the “-Xms4g” lines. 
+* **## You need to configure JVM heap size to be in the safe side when running the ElasticSearch. Since we are running an m4.large instance, we will allocate 4GB as the heap size. Edit the file “/etc/elasticsearch/jvm.options” and enable the “-Xms4g” lines. 
 
 * -Xms4g
   -Xmx4g
@@ -156,6 +156,12 @@ sudo service elasticsearch start
 
 curl http://localhost:9200
 
+# Install MetricBeat:
+
+sudo apt-get install metricbeat
+sudo service metricbeat start
+
+
 # Install Logstash
 Hey, you are almost there. Now moving on to next letter in the ELK stack. Just execute this command to install Logstash.
 
@@ -163,9 +169,20 @@ sudo apt-get install logstash
 
 * Now create a sample file at the location “/home” named as “test_log.log” and include just a few lines for testing. Some content like,
 
-INFO somelog
-ERR somelog2
-ERR somelog3
+72.132.86.148 - - [30/Mar/2020:00:00:05 +0000] "GET /item/books/2957 HTTP/1.1" 200 85 "/category/toys" "Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Trident/5.0)"
+204.39.102.110 - - [30/Mar/2020:00:00:10 +0000] "GET /category/electronics HTTP/1.1" 200 67 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.6; rv:9.0.1) Gecko/20100101 Firefox/9.0.1"
+180.171.26.145 - - [30/Mar/2020:00:00:15 +0000] "GET /item/books/2957 HTTP/1.1" 200 85 "/category/books?from=0" "Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1; WOW64; Trident/4.0; YTB730; GTB7.2; SLCC2; .NET CLR 2.0.50727; .NET CLR 3.5.30729; .NET CLR 3.0.30729; .NET4.0C; .NET4.0E; Media Center PC 6.0)"
+176.24.199.26 - - [30/Mar/2020:00:00:20 +0000] "GET /category/garden?from=10 HTTP/1.1" 200 130 "/item/electronics/3233" "Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1; Trident/4.0; YTB730; SLCC2; .NET CLR 2.0.50727; .NET CLR 3.5.30729; .NET CLR 3.0.30729; Media Center PC 6.0; .NET4.0C)"
+140.192.193.89 - - [30/Mar/2020:00:00:25 +0000] "GET /category/electronics HTTP/1.1" 200 51 "http://www.google.com/search?ie=UTF-8&q=google&sclient=psy-ab&q=Electronics+Music&oq=Electronics+Music&aq=f&aqi=g-vL1&aql=&pbx=1&bav=on.2,or.r_gc.r_pw.r_qf.,cf.osb&biw=4986&bih=109" "Mozilla/5.0 (Windows NT 6.0; rv:10.0.1) Gecko/20100101 Firefox/10.0.1"
+184.213.228.52 - - [30/Mar/2020:00:00:30 +0000] "GET /category/games?from=0 HTTP/1.1" 200 69 "/category/games" "Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1; WOW64; Trident/4.0; YTB730; GTB7.2; EasyBits GO v1.0; SLCC2; .NET CLR 2.0.50727; .NET CLR 3.5.30729; .NET CLR 3.0.30729; Media Center PC 6.0; .NET4.0C)"
+116.198.170.144 - - [30/Mar/2020:00:00:35 +0000] "GET /category/electronics HTTP/1.1" 200 122 "/item/music/1557" "Mozilla/5.0 (Windows NT 6.0) AppleWebKit/535.11 (KHTML, like Gecko) Chrome/17.0.963.56 Safari/535.11"
+44.90.187.34 - - [30/Mar/2020:00:00:40 +0000] "GET /category/finance HTTP/1.1" 200 125 "-" "Mozilla/5.0 (Windows NT 5.1) AppleWebKit/535.11 (KHTML, like Gecko) Chrome/17.0.963.46 Safari/535.11"
+196.60.49.217 - - [30/Mar/2020:00:00:45 +0000] "GET /category/giftcards HTTP/1.1" 200 119 "http://www.google.com/search?ie=UTF-8&q=google&sclient=psy-ab&q=Giftcards+Books&oq=Giftcards+Books&aq=f&aqi=g-vL1&aql=&pbx=1&bav=on.2,or.r_gc.r_pw.r_qf.,cf.osb&biw=2477&bih=449" "Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1; WOW64; Trident/4.0; YTB730; GTB7.2; SLCC2; .NET CLR 2.0.50727; .NET CLR 3.5.30729; .NET CLR 3.0.30729; .NET4.0C; .NET4.0E; Media Center PC 6.0)"
+48.180.192.116 - - [30/Mar/2020:00:00:50 +0000] "GET /category/garden HTTP/1.1" 200 122 "/item/garden/2061" "Mozilla/5.0 (Windows NT 6.0; rv:10.0.1) Gecko/20100101 Firefox/10.0.1"
+116.198.57.143 - - [30/Mar/2020:00:00:55 +0000] "GET /category/electronics HTTP/1.1" 200 73 "/item/toys/2367" "Mozilla/5.0 (iPad; CPU OS 5_0_1 like Mac OS X) AppleWebKit/534.46 (KHTML, like Gecko) Version/5.1 Mobile/9A405 Safari/7534.48.3"
+176.168.129.139 - - [30/Mar/2020:00:01:00 +0000] "GET /category/networking?from=20 HTTP/1.1" 200 69 "-" "Mozilla/5.0 (Windows NT 6.0; rv:10.0.1) Gecko/20100101 Firefox/10.0.1"
+140.45.44.120 - - [30/Mar/2020:00:01:05 +0000] "GET /item/software/2055 HTTP/1.1" 200 46 "-" "Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1; WOW64; Trident/4.0; GTB7.2; SLCC2; .NET CLR 2.0.50727; .NET CLR 3.5.30729; .NET CLR 3.0.30729; Media Center PC 6.0; .NET4.0C)"
+24.228.172.209 - - [30/Mar/2020:00:01:10 +0000] "GET /item/electronics/1670 HTTP/1.1" 200 93 "http://www.google.com/search?ie=UTF-8&q=google&sclient=psy-ab&q=Electronics&oq=Electronics&aq=f&aqi=g-vL1&aql=&pbx=1&bav=on.2,or.r_gc.r_pw.r_qf.,cf.osb&biw=4899&bih=236" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)"
 
 
 * We need to create a config file for Logstash to test the installation. Create a file with “sudo nano /etc/logstash/conf.d/apache-01.conf” and include the following content into the file.
